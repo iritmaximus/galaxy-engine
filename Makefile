@@ -1,6 +1,6 @@
 CC = g++
 CC_FLAGS = -O2 -Wall -Wextra -g
-LD_FLAGS = $(THIRDPARTY)/bgfx/.build/linux64_gcc/bin/libbgfx-shared-libDebug.so \
+LD_FLAGS = $(THIRDPARTY)/bgfx/.build/linux64_gcc/bin/libbgfx-shared-libRelease.so \
 		   -I$(THIRDPARTY)/glad/include -lGL -lGLU -lX11 -lpthread -ldl -lXrandr -lXi \
 		   $(GLFW_FLAGS)
 
