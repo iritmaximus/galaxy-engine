@@ -35,20 +35,17 @@ int main (int argc, char* args[])
     if (!glfwInit())
     {
         std::cout << "Failed to initialize GLFW" << std::endl;
-        return 1;
+        return -1;
     }
 
-    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    // glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
     GLFWwindow* window = glfwCreateWindow(W_WIDTH, W_HEIGHT, "Galaxy-engine", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
-        return 1;
+        return -1;
     }
 
     // Call bgfx::renderFrame before bgfx::init to signal to bgfx not to create a render thread.
@@ -61,7 +58,7 @@ int main (int argc, char* args[])
     pd.nwh = (void *)(uintptr_t) glfwGetX11Window(window);
 
     bgfx::Init init;
-    init.type = bgfx::RendererType::OpenGL;
+    init.type = bgfx::RendererType::Count;
     init.resolution.width = W_WIDTH;
     init.resolution.height = W_HEIGHT;
     init.resolution.reset = BGFX_RESET_VSYNC;
@@ -71,18 +68,22 @@ int main (int argc, char* args[])
     {
         std::cout << "Failed to initialize bgfx" << std::endl;
         glfwTerminate();
-        return 1;
+        return -1;
     }
 
     bgfx::setDebug(BGFX_DEBUG_TEXT);
+    bgfx::setViewClear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x443355FF, 1.0f, 0);
+    bgfx::setViewRect(0, 0, 0, W_WIDTH, W_HEIGHT);
 
+    std::cout << "Initialization done." << std::endl;
 
     while(!glfwWindowShouldClose(window))
     {
         processInput(window);
 
+        bgfx::touch(0);
+        bgfx::frame();
         glfwPollEvents();    
-        glfwSwapBuffers(window);
     }
 
 
