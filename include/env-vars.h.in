@@ -1,3 +1,4 @@
 #pragma once
 
 #define GALAXY_SHADER_BIN_DIR "@GALAXY_SHADER_BIN_DIR@"
+#define WIREFRAME_RENDERING 1

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gwindow.h"
+#include "gshader.h"
 #include "logger.h"
 
 class GRenderer {
@@ -13,4 +14,8 @@ public:
 private:
   Logger *logger;
   GWindow *window;
+  GShader *shader;
+
+  unsigned int VAO;
+  unsigned int VBO;
 };
