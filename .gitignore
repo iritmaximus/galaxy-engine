@@ -1,6 +1,8 @@
 thirdparty
+build
 
 temp
+.cache
 
 main
 *.o
