@@ -1,3 +1,5 @@
+#include "glad/glad.h"
+
 #include "GLFW/glfw3.h"
 
 #include "gwindow.h"
@@ -9,6 +11,7 @@ static void glfw_errorCallback(int error, const char *description) {
 
 void GWindow::init() {
   LOG_DEBUG("Initializing the GWindow...");
+
   glfwSetErrorCallback(glfw_errorCallback);
 
   glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
@@ -17,7 +20,9 @@ void GWindow::init() {
     throw std::runtime_error("Failed to initialize GLFW.");
   }
 
-  glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   this->window =
       glfwCreateWindow(this->width, this->height, "Galaxy-engine", NULL, NULL);
@@ -26,6 +31,13 @@ void GWindow::init() {
     LOG_ERROR("Failed to create GLFW window."); // TODO move to caller
     glfwTerminate();
     throw std::runtime_error("Failed to create GLFW window.");
+  }
+
+  glfwMakeContextCurrent(this->window);
+
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    LOG_ERROR("Failed to initialize GLAD");
+    throw std::runtime_error("Failed to initialize GLAD");
   }
 }
 

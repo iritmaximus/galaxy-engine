@@ -1,6 +1,5 @@
 #pragma once
 
-#include "bgfx/bgfx.h"
 #include <cstdint>
 
 class PosColVertex {
@@ -11,7 +10,6 @@ public:
   };
   ~PosColVertex() {};
   void init();
-  bgfx::VertexLayout getLayout() { return this->layout; };
 
 private:
   float x;
@@ -19,6 +17,4 @@ private:
   float z;
 
   uint32_t abgr;
-
-  bgfx::VertexLayout layout;
 };
