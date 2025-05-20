@@ -1,5 +1,6 @@
 #include "logger.h"
 #include "galaxy.h"
+#include "gconfig.h"
 
 const int W_WIDTH = 800;
 const int W_HEIGHT = 600;
@@ -9,8 +10,9 @@ Galaxy::Galaxy() {
   this->logger = logger;
   LOG_INFO("Starting the engine...");
 
+  GConfig *config = new GConfig(logger);
   GWindow *window = new GWindow(W_WIDTH, W_HEIGHT, logger);
-  GRenderer *renderer = new GRenderer(window, logger);
+  GRenderer *renderer = new GRenderer(window, logger, config);
 
   this->window = window;
   this->renderer = renderer;
@@ -23,6 +25,7 @@ Galaxy::~Galaxy() {
 
   delete this->renderer;
   delete this->window;
+  delete this->config;
   delete this->logger;
 }
 

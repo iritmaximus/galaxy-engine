@@ -36,11 +36,6 @@ void GShader::init() {
 
   this->program = program;
   glUseProgram(this->program);
-
-  // Test variable to enable wireframe rendering
-  if (WIREFRAME_RENDERING) {
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-  }
 };
 
 GShader::~GShader() {

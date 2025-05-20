@@ -1,6 +1,8 @@
 #include "glad/glad.h"
 
 #include "env-vars.h"
+#include "gconfig.h"
+#include "gmenu.h"
 #include "grenderer.h"
 #include "gshader.h"
 #include "logger.h"
@@ -17,13 +19,16 @@ unsigned int indices[] = {
     1, 2, 3  // second triangle
 };
 
-GRenderer::GRenderer(GWindow *w, Logger *l) : window(w), logger(l), VAO(0), VBO(0) {
-  this->shader = new GShader(l);
+GRenderer::GRenderer(GWindow *w, Logger *l, GConfig *c)
+    : window(w), logger(l), config(c), VAO(0), VBO(0) {
+  this->shader = new GShader(l, c);
+  this->menu = new GMenu(l, w, c);
 }
 
 GRenderer::~GRenderer() {
   LOG_DEBUG("Shutting down renderer...");
   delete this->shader;
+  delete this->menu;
 }
 
 void GRenderer::init() {
@@ -47,15 +52,22 @@ void GRenderer::init() {
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
+
+  if (this->config->show_menus)
+    this->menu->init();
 }
 
 void GRenderer::update() {
+
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
   glUseProgram(this->shader->getProgram());
   glBindVertexArray(this->VAO);
   glDrawArrays(GL_TRIANGLES, 0, 3);
+
+  if (this->config->show_menus)
+    this->menu->update();
 
   glfwSwapBuffers(this->window->getWindow());
 }

@@ -21,17 +21,40 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/Dav1dde/glad.git
   GIT_TAG v0.1.36
 )
-FetchContent_MakeAvailable(glfw glad)
+FetchContent_Declare(
+  imgui
+  GIT_REPOSITORY https://github.com/ocornut/imgui.git
+  GIT_TAG v1.91.9
+)
+
+FetchContent_MakeAvailable(glfw glad imgui)
+
+
+set(IMGUI_SOURCES
+  ${imgui_SOURCE_DIR}/imgui.cpp
+  ${imgui_SOURCE_DIR}/imgui_demo.cpp
+  ${imgui_SOURCE_DIR}/imgui_draw.cpp
+  ${imgui_SOURCE_DIR}/imgui_tables.cpp
+  ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+)
+set(IMGUI_BACKEND_SOURCES
+  ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+  ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
 
 set(SOURCES
     src/galaxy.cpp
     src/gwindow.cpp
     src/grenderer.cpp
+    src/gmenu.cpp
+    src/gconfig.cpp
     src/logger.cpp
     src/gshader.cpp
     src/vertex.cpp
     src/todo.cpp
     ${GLAD_OUT_DIR}/src/glad.c
+    ${IMGUI_SOURCES}
+    ${IMGUI_BACKEND_SOURCES}
 )
 
 set(GLAD_PROFILE "core" CACHE STRING "glad profile (core or compatibility)")
@@ -41,6 +64,7 @@ configure_file(include/env-vars.h.in ${CMAKE_BINARY_DIR}/generated/include/env-v
 set(INCLUDE_DIRS
     ${CMAKE_BINARY_DIR}/generated/include # env-vars.h
     ${GLAD_INCLUDE_DIRS} # glad/glad.h
+    ${imgui_SOURCE_DIR}
 )
 
 add_library(galaxy-engine-lib ${SOURCES})
